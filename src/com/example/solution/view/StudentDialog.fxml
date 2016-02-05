@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="400.0" snapToPixel="true" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.netcracker.example.view.StudentDialogPresenter">
+  <children>
+    <Pane prefHeight="400.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <children>
+        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="102.0" layoutY="14.0" prefHeight="26.9609375" prefWidth="211.0" text="Редактирование студента">
+          <font>
+            <Font name="Times New Roman" size="14.0" />
+          </font>
+        </Label>
+        <GridPane layoutX="54.0" layoutY="50.0" prefHeight="230.0" prefWidth="300.0">
+          <children>
+            <Label text="Имя" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <Label text="Отчество" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <Label text="Фамилия" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <Label text="Факультет" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+            <Label text="Номер группы" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+            <Label text="Дата зачисления" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+            <TextField fx:id="txtName" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+            <TextField fx:id="txtMiddleName" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="txtLastName" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="txtStartDate" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <ChoiceBox fx:id="boxFaculty" prefWidth="172.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="Item 1" />
+                  <String fx:value="Item 2" />
+                  <String fx:value="Item 3" />
+                </FXCollections>
+              </items>
+            </ChoiceBox>
+            <ChoiceBox id="boxGroup" fx:id="boxGroupNumber" prefWidth="172.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="Item 1" />
+                  <String fx:value="Item 2" />
+                  <String fx:value="Item 3" />
+                </FXCollections>
+              </items>
+            </ChoiceBox>
+          </children>
+          <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="134.0" minWidth="10.0" prefWidth="98.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="172.0" minWidth="10.0" prefWidth="172.0" />
+          </columnConstraints>
+          <padding>
+            <Insets left="15.0" right="15.0" />
+          </padding>
+          <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          </rowConstraints>
+        </GridPane>
+        <Button fx:id="btApprove" layoutX="81.0" layoutY="328.0" mnemonicParsing="false" onAction="#handleApprove" prefWidth="93.0" text="Подтвердить" />
+        <Button fx:id="btCancel" layoutX="225.0" layoutY="329.0" mnemonicParsing="false" onAction="#handleCancel" prefWidth="93.0" text="Отмена" />
+      </children>
+    </Pane>
+  </children>
+</AnchorPane>
