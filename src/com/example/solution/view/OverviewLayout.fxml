@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<TabPane prefHeight="400.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.netcracker.example.view.OverviewPresenter">
+<TabPane prefHeight="400.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.example.solution.view.OverviewPresenter">
   <tabs>
     <Tab fx:id="tabStudents" text="Студенты">
       <content>
