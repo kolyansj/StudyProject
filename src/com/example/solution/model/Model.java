@@ -134,7 +134,8 @@ public class Model implements Observable {
     
     public void updateGroup(String groupId, int number, String faculty) {
         Group group = getGroupById(groupId);
-        if (group != null) {
+        if (group != null) {            
+            group.setId(String.valueOf(number + faculty));
             group.setNumber(number);
             group.setFaculty(faculty);
             

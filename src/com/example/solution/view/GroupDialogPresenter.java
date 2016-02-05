@@ -52,9 +52,8 @@ public class GroupDialogPresenter {
                             txtFaculty.getText());
                 }
                 break;
-                case Edit: {                    
-                    String groupId = txtGroupNumber.getText() + txtFaculty.getText();                    
-                    ctrl.updateGroup(groupId, 
+                case Edit: {                                       
+                    ctrl.updateGroup(group.getId(), 
                             Integer.parseInt(txtGroupNumber.getText()), 
                             txtFaculty.getText());
                 }
