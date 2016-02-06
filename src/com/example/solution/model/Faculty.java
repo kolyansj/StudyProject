@@ -6,6 +6,7 @@
 package com.example.solution.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -26,11 +27,14 @@ public class Faculty implements Serializable {
     private List<Group> groups;
     
     public Faculty() {
+        groups = new ArrayList<>();
     }
 
-    public Faculty(String id, String name) {
+    public Faculty(String id, String name, String abbreviation) {
+        this();
         this.id = id;
         this.name = name;
+        this.abbreviation = abbreviation;
     }       
 
     @XmlAttribute(name = "id")

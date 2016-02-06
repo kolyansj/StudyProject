@@ -47,15 +47,15 @@ public class GroupDialogPresenter {
         if (isInputValid()) {            
             switch(mode) {
                 case Create: {                                        
-                    ctrl.createGroup(
-                            Integer.parseInt(txtGroupNumber.getText()),
-                            txtFaculty.getText());
+                    //ctrl.createGroup(
+                    //        Integer.parseInt(txtGroupNumber.getText()),
+                    //        txtFaculty.getText());
                 }
                 break;
                 case Edit: {                                       
-                    ctrl.updateGroup(group.getId(), 
-                            Integer.parseInt(txtGroupNumber.getText()), 
-                            txtFaculty.getText());
+                    //ctrl.updateGroup(group.getId(), 
+                    //        Integer.parseInt(txtGroupNumber.getText()), 
+                    //        txtFaculty.getText());
                 }
                 break;
                 default: throw new UnsupportedOperationException();
@@ -85,7 +85,7 @@ public class GroupDialogPresenter {
     public void setGroup(Group group) {
         this.group = group;
         txtGroupNumber.setText(String.valueOf(group.getNumber()));
-        txtFaculty.setText(group.getFaculty());
+        txtFaculty.setText(group.getFaculty().toString());
     }
 
     public boolean isOkClicked() {

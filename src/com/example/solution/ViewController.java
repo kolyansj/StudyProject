@@ -7,6 +7,7 @@ package com.example.solution;
 
 import com.example.solution.FileSettings;
 import com.example.solution.ViewMode;
+import com.example.solution.model.Faculty;
 import com.example.solution.model.Group;
 import com.example.solution.model.Model;
 import com.example.solution.model.Student;
@@ -48,19 +49,19 @@ public class ViewController {
         data.saveTasks();
     }
     
-    public List<Group> getData() {
-        return data.getGroups();
+    public List<Faculty> getData() {
+        return data.getFaculties();
     }
     
     public Group getGroupById(String groupId) {
         return data.getGroupById(groupId);
     }
     
-    public boolean createGroup(int number, String faculty) {
-        return data.createGroup(number, faculty);
+    public void createGroup(int number, Faculty faculty) {
+        data.createGroup(number, faculty);
     }
     
-    public void updateGroup(String groupId, int number, String faculty) {
+    public void updateGroup(String groupId, int number, Faculty faculty) {
         data.updateGroup(groupId, number, faculty);
     }
     

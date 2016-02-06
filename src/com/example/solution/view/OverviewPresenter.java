@@ -137,7 +137,7 @@ public class OverviewPresenter implements Observer {
             lbMiddleName.setText(student.getMiddleName());
             lbLastName.setText(student.getLastName());
             lbGroupNumber.setText(Integer.toString(student.getGroup().getNumber()));
-            lbFaculty.setText(student.getGroup().getFaculty());
+            //lbFaculty.setText(student.getGroup().getFaculty());
             lbStartDate.setText(Util.formatDate(student.getStartStudyDate()));
         }
     }
@@ -145,7 +145,7 @@ public class OverviewPresenter implements Observer {
     private void showGroupDetails(Group group) {
         if (group != null) {
             lbGroupNumber2.setText(String.valueOf(group.getNumber()));
-            lbFaculty2.setText(group.getFaculty());
+            //lbFaculty2.setText(group.getFaculty());
             lbCount.setText(String.valueOf(group.getStudents().size()));
         }
     }

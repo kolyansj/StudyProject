@@ -19,34 +19,34 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class University implements Serializable {
 
     @XmlElementRef
-    private List<Group> groups;
+    private List<Faculty> faculties;
 
     public University() {
-        groups = new ArrayList<>();
+        faculties = new ArrayList<>();
     }
 
     public University(University university) {
-        this.groups = university.getGroups();
+        this.faculties = university.getFaculties();
     }
 
-    public boolean addGroup(Group group) {
-        return groups.add(group);
+    public boolean addFaculty(Faculty faculty) {
+        return faculties.add(faculty);
     }
 
-    public List<Group> getGroups() {
-        return groups;
+    public List<Faculty> getFaculties() {
+        return faculties;
     }
 
-    public Group getGroup(int index) {
-        return groups.get(index);
+    public Faculty getFaculty(int index) {
+        return faculties.get(index);
     }
 
     public int size() {
-        return groups.size();
+        return faculties.size();
     }
 
-    public boolean removeGroup(Group group) {
-        return groups.remove(group);
+    public boolean removeFaculty(Faculty faculty) {
+        return faculties.remove(faculty);
     }
     
 }
