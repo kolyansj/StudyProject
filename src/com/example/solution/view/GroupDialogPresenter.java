@@ -7,9 +7,14 @@ package com.example.solution.view;
 
 import com.example.solution.ViewMode;
 import com.example.solution.ViewController;
+import com.example.solution.model.Faculty;
 import com.example.solution.model.Group;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -24,9 +29,9 @@ public class GroupDialogPresenter {
     @FXML
     private Button btApprove;    
     @FXML
-    private TextField txtFaculty;
-    @FXML
     private TextField txtGroupNumber;
+    @FXML
+    private ChoiceBox<Faculty> boxFaculties;
     
     private ViewMode mode;
     private Stage dialogStage;
@@ -40,22 +45,24 @@ public class GroupDialogPresenter {
     }
     
     @FXML
-    private void initialize() {}
+    private void initialize() {
+        
+    }
     
     @FXML
     private void handleApprove() {
         if (isInputValid()) {            
             switch(mode) {
                 case Create: {                                        
-                    //ctrl.createGroup(
-                    //        Integer.parseInt(txtGroupNumber.getText()),
-                    //        txtFaculty.getText());
+                    ctrl.createGroup(
+                            Integer.parseInt(txtGroupNumber.getText()),
+                            boxFaculties.getValue());
                 }
                 break;
                 case Edit: {                                       
-                    //ctrl.updateGroup(group.getId(), 
-                    //        Integer.parseInt(txtGroupNumber.getText()), 
-                    //        txtFaculty.getText());
+                    ctrl.updateGroup(group.getId(), 
+                            Integer.parseInt(txtGroupNumber.getText()), 
+                            boxFaculties.getValue());
                 }
                 break;
                 default: throw new UnsupportedOperationException();
@@ -78,14 +85,27 @@ public class GroupDialogPresenter {
         return mode;
     }
 
+    @FXML
+    private Label lbHeader;
+    
     public void setMode(ViewMode mode) {
         this.mode = mode;
+        switch(mode){
+            case Create: {
+                lbHeader.setText("Создание группы");
+            }
+            break;
+            case Edit: {
+                lbHeader.setText("Редактирование группы");
+            }
+            break;
+            default: throw new UnsupportedOperationException();
+        }
     }    
 
     public void setGroup(Group group) {
         this.group = group;
         txtGroupNumber.setText(String.valueOf(group.getNumber()));
-        txtFaculty.setText(group.getFaculty().toString());
     }
 
     public boolean isOkClicked() {
@@ -96,7 +116,7 @@ public class GroupDialogPresenter {
         if (txtGroupNumber.getText() == null || txtGroupNumber.getText().isEmpty()) {
             return false;
         }
-        if (txtFaculty.getText() == null || txtFaculty.getText().isEmpty()) {
+        if (boxFaculties.getSelectionModel().getSelectedItem().toString().isEmpty()) {
             return false;
         }
         return true;
@@ -104,5 +124,9 @@ public class GroupDialogPresenter {
     
     public void setController(ViewController ctrl) {
         this.ctrl = ctrl;
+        ObservableList<Faculty> facs = FXCollections.observableArrayList();
+        facs.addAll(ctrl.getData());
+        boxFaculties.setItems(facs);
+        boxFaculties.getSelectionModel().selectFirst();
     }
 }

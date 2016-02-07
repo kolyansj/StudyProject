@@ -2,6 +2,7 @@
 
 <?import java.lang.*?>
 <?import java.util.*?>
+<?import javafx.collections.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -9,7 +10,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.example.solution.view.GroupDialogPresenter">
   <children>
-    <Label alignment="CENTER" contentDisplay="CENTER" layoutX="60.0" layoutY="15.0" prefWidth="280.0" text="Редактирование группы">
+    <Label fx:id="lbHeader" alignment="CENTER" contentDisplay="CENTER" layoutX="60.0" layoutY="15.0" prefWidth="280.0" text="Редактирование группы">
       <font>
         <Font size="16.0" />
       </font>
@@ -23,7 +24,15 @@
         </Label>
         <Label font="$x1" text="Факультет" GridPane.columnIndex="0" GridPane.rowIndex="1" />
         <TextField fx:id="txtGroupNumber" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-        <TextField fx:id="txtFaculty" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <ChoiceBox fx:id="boxFaculties" prefWidth="167.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+          <items>
+            <FXCollections fx:factory="observableArrayList">
+              <String fx:value="Item 1" />
+              <String fx:value="Item 2" />
+              <String fx:value="Item 3" />
+            </FXCollections>
+          </items>
+        </ChoiceBox>
       </children>
       <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

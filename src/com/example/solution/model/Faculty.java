@@ -95,7 +95,10 @@ public class Faculty implements Serializable {
         }
         return true;
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return cutName;
+    }
 
 }

@@ -97,11 +97,9 @@ public class Group implements Serializable {
         return true;
     }
     
-    
-
     @Override
     public String toString() {
-        return "Группа №" + number + ", Факультет : " + faculty;
+        return "Группа №" + number;
     }
         
 }

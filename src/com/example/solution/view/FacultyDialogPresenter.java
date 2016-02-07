@@ -10,6 +10,7 @@ import com.example.solution.ViewMode;
 import com.example.solution.model.Faculty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -24,13 +25,12 @@ public class FacultyDialogPresenter {
     @FXML
     private Button btApprove;    
     @FXML
-    private TextField txtFacultyId;
-    @FXML
     private TextField txtFacultyName;
     @FXML
     private TextField txtFacultyCutName;
     @FXML
     private Label lbHeader;
+    
     
     private ViewMode mode;
     private Stage dialogStage;
@@ -44,7 +44,9 @@ public class FacultyDialogPresenter {
     }
     
     @FXML
-    private void initialize() {}
+    private void initialize() {
+        
+    }
     
     @FXML
     private void handleApprove() {
@@ -85,11 +87,21 @@ public class FacultyDialogPresenter {
 
     public void setMode(ViewMode mode) {
         this.mode = mode;
+        switch(mode){
+            case Create: {
+                lbHeader.setText("Создание факультета");
+            }
+            break;
+            case Edit: {
+                lbHeader.setText("Редактирование факультета");
+            }
+            break;
+            default: throw new UnsupportedOperationException();
+        }
     }    
 
     public void setFaculty(Faculty faculty) {
         this.faculty = faculty;
-        txtFacultyId.setText(faculty.getId());
         txtFacultyName.setText(faculty.getName());
         txtFacultyCutName.setText(faculty.getCutName());
     }
@@ -99,9 +111,6 @@ public class FacultyDialogPresenter {
     }    
 
     private boolean isInputValid() {
-        if (txtFacultyId.getText() == null || txtFacultyId.getText().isEmpty()) {
-            return false;
-        }
         if (txtFacultyName.getText() == null || txtFacultyName.getText().isEmpty()) {
             return false;
         }

@@ -15,9 +15,13 @@ import java.text.ParseException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -34,9 +38,9 @@ public class StudentDialogPresenter {
     @FXML
     private TextField txtLastName;
     @FXML
-    private ChoiceBox boxFaculty;
+    private ChoiceBox<Faculty> boxFaculty;
     @FXML
-    private ChoiceBox boxGroupNumber;
+    private ChoiceBox<Group> boxGroupNumber;
     @FXML
     private TextField txtStartDate;
 
@@ -53,7 +57,17 @@ public class StudentDialogPresenter {
     }
     
     @FXML
-    private void initialize() { }
+    private void initialize() { 
+        
+        boxFaculty.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Faculty>() {
+            @Override
+            public void changed(ObservableValue<? extends Faculty> observable,
+                    Faculty oldValue, Faculty newValue) {
+                boxGroupNumber.setItems(FXCollections.observableArrayList(newValue.getGroups()));
+                boxGroupNumber.getSelectionModel().selectFirst();
+            }
+        });
+    }
     
     @FXML
     private void handleCancel() {
@@ -67,7 +81,8 @@ public class StudentDialogPresenter {
                 case Create: {
                     ctrl.createStudent(txtName.getText(),
                             txtMiddleName.getText(),
-                            txtLastName.getText(), group,
+                            txtLastName.getText(), 
+                            boxGroupNumber.getValue(),
                             Util.parseDate(txtStartDate.getText()));
                 }
                 break;
@@ -75,7 +90,8 @@ public class StudentDialogPresenter {
                     ctrl.updateStudent(student.getId(),
                             txtName.getText(),
                             txtMiddleName.getText(),
-                            txtLastName.getText(), group,
+                            txtLastName.getText(), 
+                            boxGroupNumber.getValue(),
                             Util.parseDate(txtStartDate.getText()));
                 }
                 break;
@@ -101,14 +117,32 @@ public class StudentDialogPresenter {
         //}
         //boxGroupNumber.setItems(FXCollections.observableArrayList(nums));
         //boxFaculty.setItems(FXCollections.observableArrayList(facs));
+        ObservableList<Faculty> facs = FXCollections.observableArrayList();
+        facs.addAll(ctrl.getData());
+        boxFaculty.setItems(facs);
+        boxFaculty.getSelectionModel().selectFirst();
     }
 
     public ViewMode getMode() {
         return mode;
     }
     
+    @FXML
+    private Label lbHeader;
+    
     public void setMode(ViewMode mode) {
         this.mode = mode;
+        switch(mode){
+            case Create: {
+                lbHeader.setText("Добавление студента");
+            }
+            break;
+            case Edit: {
+                lbHeader.setText("Редактирование студента");
+            }
+            break;
+            default: throw new UnsupportedOperationException();
+        }
     }
 
     public void setStudent(Student student) {
@@ -117,7 +151,7 @@ public class StudentDialogPresenter {
         txtMiddleName.setText(student.getMiddleName());
         txtLastName.setText(student.getLastName());
         boxFaculty.setValue(student.getGroup().getFaculty());
-        boxGroupNumber.setValue(student.getGroup().getNumber());
+        boxGroupNumber.setValue(student.getGroup());
         txtStartDate.setText(Util.formatDate(student.getStartStudyDate()));
     }
 
@@ -127,7 +161,6 @@ public class StudentDialogPresenter {
 
     private boolean isInputValid() {
         if (txtName.getText() == null || txtName.getText().isEmpty()) {
-            txtName.setText("ЗАДАНО ПУСТОЕ ИМЯ!");
             return false;
         }
         if (txtMiddleName.getText() == null || txtMiddleName.getText().isEmpty()) {
@@ -140,26 +173,6 @@ public class StudentDialogPresenter {
             return false;
         }
         
-        String groupId = boxGroupNumber.getValue().toString() + 
-                    boxFaculty.getValue().toString();
-        switch (mode) {
-            case Edit: {
-                Group currentGroup = student.getGroup();
-                if (currentGroup.getId().equals(groupId)) {
-                    this.group = currentGroup;
-                    return true;
-                }
-            }
-            case Create: {
-                Group newGroup = ctrl.getGroupById(groupId);
-                if (newGroup == null) {
-                    return false;
-                } else {
-                    group = newGroup;
-                    return true;
-                }
-            }
-            default: throw new UnsupportedOperationException();
-        }
+        return true;       
     }
 }

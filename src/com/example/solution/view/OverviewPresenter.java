@@ -72,14 +72,12 @@ public class OverviewPresenter implements Observer {
     @FXML
     private Label lbGroupNumber2;
     @FXML
-    private Label lbCount;
+    private Label lbCountStudents;
     @FXML
     private Label lbFaculty2;
 
     @FXML
     private TableView<Faculty> facultiesTable;
-    @FXML
-    private TableColumn<Faculty, String> colFacultyId;
     @FXML
     private TableColumn<Faculty, String> colFacultyName;
     @FXML
@@ -109,9 +107,6 @@ public class OverviewPresenter implements Observer {
         colGroupNumber.setCellValueFactory(new PropertyValueFactory<Group, Integer>("number"));
         colFaculty.setCellValueFactory(new PropertyValueFactory<Group, String>("faculty"));
 
-        showStudentDetails(null);
-        showGroupDetails(null);
-
         studentsTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Student>() {
             @Override
             public void changed(ObservableValue<? extends Student> observable,
@@ -125,10 +120,10 @@ public class OverviewPresenter implements Observer {
             public void changed(ObservableValue<? extends Group> observable,
                     Group oldValue, Group newValue) {
                 showGroupDetails(newValue);
+                
             }
         });
         
-        colFacultyId.setCellValueFactory(new PropertyValueFactory<Faculty, String>("id"));
         colFacultyName.setCellValueFactory(new PropertyValueFactory<Faculty, String>("name"));
         colFacultyCutName.setCellValueFactory(new PropertyValueFactory<Faculty, String>("cutName"));
         
@@ -161,6 +156,17 @@ public class OverviewPresenter implements Observer {
         groupsTable.setItems(groupList);
         studentsTable.getItems().clear();
         studentsTable.setItems(studentList);
+        System.out.println("UPDATE");
+        updateTables();
+    }
+    
+    private void updateTables(){
+        facultiesTable.getColumns().get(0).setVisible(false);
+        facultiesTable.getColumns().get(0).setVisible(true);
+        groupsTable.getColumns().get(0).setVisible(false);
+        groupsTable.getColumns().get(0).setVisible(true);
+        studentsTable.getColumns().get(0).setVisible(false);
+        studentsTable.getColumns().get(0).setVisible(true);
     }
 
     public void setController(ViewController ctrl) {
@@ -180,7 +186,6 @@ public class OverviewPresenter implements Observer {
     
     private void showFacultyDetails(Faculty faculty){
         if (faculty != null) {
-            lbFacultyId.setText(faculty.getId());
             lbFacultyName.setText(faculty.getName());
             lbFacultyCutName.setText(faculty.getCutName());
         }
@@ -190,7 +195,7 @@ public class OverviewPresenter implements Observer {
         if (group != null) {
             lbGroupNumber2.setText(String.valueOf(group.getNumber()));
             lbFaculty2.setText(group.getFaculty().getCutName());
-            lbCount.setText(String.valueOf(group.getStudents().size()));
+            lbCountStudents.setText(String.valueOf(group.getStudents().size()));
         }
     }
 
