@@ -270,6 +270,62 @@ public class Model implements Observable {
         }
     }
 
+    
+    public Faculty getFacultyById(String facultyId) {
+        //LOG.log(Level.INFO, "id: " + id);
+        if (facultyId != null) {
+            for (Faculty faculty: university.getFaculties()) {
+                    if (faculty.getId().equals(facultyId)) {
+                        return faculty;
+                    }
+            }
+        } else {
+            //LOG.log(Level.WARN, "id is null");
+            //throw new NullPointerException("id is null");
+        }
+        return null;
+    }
+    
+    public boolean createFaculty(String id, String name, String cutName) {
+        String facultyId = id;
+        Faculty faculty = getFacultyById(facultyId);
+        if (faculty == null) {
+            faculty = new Faculty(id, name, cutName);
+            university.addFaculty(faculty);
+            
+            changed = true;
+            notifyObservers();
+            
+            return true;
+        } else {
+            return false;
+        }        
+    }
+    
+    public void updateFaculty(String id, String name, String cutName) {
+        Faculty faculty = getFacultyById(id);
+        if (faculty != null) {            
+            faculty.setId(id);
+            faculty.setName(name);
+            faculty.setCutName(cutName);
+            
+            changed = true;
+            notifyObservers();
+        }
+    }
+    
+    public void deleteFaculty(String facultyId) {
+        Faculty faculty = getFacultyById(facultyId);
+        if (faculty != null) {
+            faculty.getGroups().clear();
+            university.removeFaculty(faculty);
+            
+            changed = true;
+            notifyObservers();
+        }
+    }
+    
+    
     public void loadTasks() {
         //LOG.log(Level.INFO, "load from XML or DB");
         if(provider != null) {
