@@ -11,6 +11,7 @@ import com.example.solution.model.Faculty;
 import com.example.solution.model.Group;
 import com.example.solution.model.Model;
 import com.example.solution.model.Student;
+import com.example.solution.view.FacultyDialogPresenter;
 import com.example.solution.view.GroupDialogPresenter;
 import com.example.solution.view.OverviewPresenter;
 import com.example.solution.view.StudentDialogPresenter;
@@ -55,6 +56,18 @@ public class ViewController {
     
     public Group getGroupById(String groupId) {
         return data.getGroupById(groupId);
+    }
+    
+    public void createFaculty(String name, String abbreviation) {
+        data.createFaculty(name, abbreviation);
+    }
+    
+    public void updateFaculty(String facultyId, String name, String abbreviation) {
+        data.updateFaculty(facultyId, name, abbreviation);
+    }
+    
+    public void deleteFaculty(String facultyId) {
+        data.deleteFaculty(facultyId);
     }
     
     public void createGroup(int number, Faculty faculty) {
@@ -189,7 +202,6 @@ public class ViewController {
             throw new RuntimeException(e);
         }
     }
-
     
     public boolean showGroupEditDialog(Group group) {
         try {
@@ -215,6 +227,62 @@ public class ViewController {
             dialogStage.showAndWait();
             
             return controller.isOkClicked();            
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public boolean showFacultyEditDialog(Faculty faculty) {
+        try {
+            // Load the fxml file and create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(ViewController.class.getResource("view/FacultyDialog.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+
+            // Create the dialog Stage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Редактирование информации о факультете");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            FacultyDialogPresenter controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setController(this);
+            controller.setMode(ViewMode.Edit);
+            controller.setFaculty(faculty);
+
+            dialogStage.showAndWait();
+            
+            return controller.isOkClicked();            
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public boolean showFacultyAddDialog() throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(ViewController.class.getResource("view/FacultyDialog.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+
+            // Create the dialog Stage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Добавить новый факультет");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            FacultyDialogPresenter controller = loader.getController();
+            controller.setDialogStage(dialogStage);            
+            controller.setController(this);
+            controller.setMode(ViewMode.Create);
+            
+            dialogStage.showAndWait();
+            
+            return controller.isOkClicked();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

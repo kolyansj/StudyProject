@@ -52,15 +52,14 @@ public class FacultyDialogPresenter {
             switch(mode) {
                 case Create: {                                        
                     ctrl.createFaculty(
-                            txtFacultyId.getText(),
                             txtFacultyName.getText(),
                             txtFacultyCutName.getText());
                 }
                 break;
-                case Edit: {                                       
+                case Edit: {        
+                    String id = faculty.getId();
                     ctrl.updateFaculty(
-                            txtFacultyId.getId(), 
-                            txtFacultyName.getText(), 
+                            id, txtFacultyName.getText(), 
                             txtFacultyCutName.getText());
                 }
                 break;

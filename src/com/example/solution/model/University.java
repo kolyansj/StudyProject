@@ -44,26 +44,8 @@ public class University implements Serializable {
     public int size() {
         return faculties.size();
     }
-
-    public boolean removeFaculty(Faculty faculty) {
-    public int getCountGroups(){
-        return faculties.size();
-    }
-    
-    public List<Faculty> getFaculties(){
-        return faculties;
-    }
-    
-    public void addFaculty(Faculty faculty){
-        faculties.add(faculty);
-    }
     
     public boolean removeFaculty(Faculty faculty){
         return faculties.remove(faculty);
-    }
-    
-    public Faculty getFaculty(int index){
-        return faculties.get(index);
-    }
-    
+    }    
 }

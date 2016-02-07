@@ -145,12 +145,21 @@ public class OverviewPresenter implements Observer {
     public void update(Observable o, Object args) {
         ObservableList<Group> groupList = FXCollections.observableArrayList();
         ObservableList<Student> studentList = FXCollections.observableArrayList();
-        List<Group> groups = (List<Group>) args;
-        groupList.addAll(groups);
+        ObservableList<Faculty> facultyList = FXCollections.observableArrayList();
+        List<Faculty> faculties = (List<Faculty>) args;  
+        facultyList.addAll(faculties);
+        facultiesTable.getItems().clear();
+        facultiesTable.setItems(facultyList);
+        for (Faculty faculty : faculties) {
+            List<Group> groups = faculty.getGroups();
+            groupList.addAll(groups);
+            for (Group group : groups) {
+                studentList.addAll(group.getStudents());
+            }
+        }  
+        groupsTable.getItems().clear();
         groupsTable.setItems(groupList);
-        for (Group group : groups) {
-            studentList.addAll(group.getStudents());
-        }
+        studentsTable.getItems().clear();
         studentsTable.setItems(studentList);
     }
 
@@ -164,7 +173,7 @@ public class OverviewPresenter implements Observer {
             lbMiddleName.setText(student.getMiddleName());
             lbLastName.setText(student.getLastName());
             lbGroupNumber.setText(Integer.toString(student.getGroup().getNumber()));
-            lbFaculty.setText(student.getGroup().getFaculty());
+            lbFaculty.setText(student.getGroup().getFaculty().getCutName());
             lbStartDate.setText(Util.formatDate(student.getStartStudyDate()));
         }
     }
@@ -180,7 +189,7 @@ public class OverviewPresenter implements Observer {
     private void showGroupDetails(Group group) {
         if (group != null) {
             lbGroupNumber2.setText(String.valueOf(group.getNumber()));
-            lbFaculty2.setText(group.getFaculty());
+            lbFaculty2.setText(group.getFaculty().getCutName());
             lbCount.setText(String.valueOf(group.getStudents().size()));
         }
     }
