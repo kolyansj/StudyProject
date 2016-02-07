@@ -11,9 +11,10 @@ import java.util.List;
 import java.util.Objects;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -24,14 +25,14 @@ public class Group implements Serializable {
     
     private String id;
     private int number;
-    private Faculty faculty; 
+    private String faculty; 
     private List<Student> students;
 
     public Group() {
         students = new ArrayList<>();
     }
     
-    public Group(String id, int number, Faculty faculty) {
+    public Group(String id, int number, String faculty) {
         this();
         this.id = id;
         this.number = number;
@@ -66,12 +67,12 @@ public class Group implements Serializable {
         this.number = number;
     }
 
-    @XmlTransient
-    public Faculty getFaculty() {
+    @XmlAttribute(name = "faculty")
+    public String getFaculty() {
         return faculty;
     }
 
-    public void setFaculty(Faculty faculty) {
+    public void setFaculty(String faculty) {
         this.faculty = faculty;
     }
 

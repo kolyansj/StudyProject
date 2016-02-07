@@ -8,7 +8,6 @@ package com.example.solution.view;
 import com.example.solution.ViewMode;
 import com.example.solution.ViewController;
 import com.example.solution.Util;
-import com.example.solution.model.Faculty;
 import com.example.solution.model.Group;
 import com.example.solution.model.Student;
 import java.text.ParseException;
@@ -92,15 +91,15 @@ public class StudentDialogPresenter {
     
     public void setController(ViewController ctrl) {
         this.ctrl = ctrl;
-        //List<Group> groups = ctrl.getData();
-        //Set<Integer> nums = new HashSet<>();
-        //Set<Faculty> facs = new HashSet<>();
-        //for (Group group : groups) {
-        //    nums.add(group.getNumber());
-        //    facs.add(group.getFaculty());
-        //}
-        //boxGroupNumber.setItems(FXCollections.observableArrayList(nums));
-        //boxFaculty.setItems(FXCollections.observableArrayList(facs));
+        List<Group> groups = ctrl.getData();
+        Set<Integer> nums = new HashSet<>();
+        Set<String> facs = new HashSet<>();
+        for (Group group : groups) {
+            nums.add(group.getNumber());
+            facs.add(group.getFaculty());
+        }
+        boxGroupNumber.setItems(FXCollections.observableArrayList(nums));
+        boxFaculty.setItems(FXCollections.observableArrayList(facs));
     }
 
     public ViewMode getMode() {

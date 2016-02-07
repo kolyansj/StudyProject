@@ -5,9 +5,9 @@
  */
 package com.example.solution.view;
 
-import com.example.solution.ViewMode;
 import com.example.solution.ViewController;
-import com.example.solution.model.Group;
+import com.example.solution.ViewMode;
+import com.example.solution.model.Faculty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,27 +18,28 @@ import javafx.stage.Stage;
  *
  * @author Answer
  */
-public class GroupDialogPresenter {
-    
+public class FacultyDialogPresenter {
     @FXML
     private Button btCancel;
     @FXML
     private Button btApprove;    
     @FXML
-    private TextField txtFaculty;
+    private TextField txtFacultyId;
     @FXML
-    private TextField txtGroupNumber;
+    private TextField txtFacultyName;
     @FXML
-    private Label lbCountStudents;
+    private TextField txtFacultyCutName;
+    @FXML
+    private Label lbHeader;
     
     private ViewMode mode;
     private Stage dialogStage;
-    private Group group;
+    private Faculty faculty;
     private boolean okClicked = false;
     
     private ViewController ctrl;
 
-    public GroupDialogPresenter() {
+    public FacultyDialogPresenter() {
         this.mode = ViewMode.Create; // by Default
     }
     
@@ -50,15 +51,17 @@ public class GroupDialogPresenter {
         if (isInputValid()) {            
             switch(mode) {
                 case Create: {                                        
-                    ctrl.createGroup(
-                            Integer.parseInt(txtGroupNumber.getText()),
-                            txtFaculty.getText());
+                    ctrl.createFaculty(
+                            txtFacultyId.getText(),
+                            txtFacultyName.getText(),
+                            txtFacultyCutName.getText());
                 }
                 break;
                 case Edit: {                                       
-                    ctrl.updateGroup(group.getId(), 
-                            Integer.parseInt(txtGroupNumber.getText()), 
-                            txtFaculty.getText());
+                    ctrl.updateFaculty(
+                            txtFacultyId.getId(), 
+                            txtFacultyName.getText(), 
+                            txtFacultyCutName.getText());
                 }
                 break;
                 default: throw new UnsupportedOperationException();
@@ -85,11 +88,11 @@ public class GroupDialogPresenter {
         this.mode = mode;
     }    
 
-    public void setGroup(Group group) {
-        this.group = group;
-        txtGroupNumber.setText(String.valueOf(group.getNumber()));
-        txtFaculty.setText(group.getFaculty());
-        lbCountStudents.setText(String.valueOf(group.getStudents().size()));
+    public void setFaculty(Faculty faculty) {
+        this.faculty = faculty;
+        txtFacultyId.setText(faculty.getId());
+        txtFacultyName.setText(faculty.getName());
+        txtFacultyCutName.setText(faculty.getCutName());
     }
 
     public boolean isOkClicked() {
@@ -97,10 +100,13 @@ public class GroupDialogPresenter {
     }    
 
     private boolean isInputValid() {
-        if (txtGroupNumber.getText() == null || txtGroupNumber.getText().isEmpty()) {
+        if (txtFacultyId.getText() == null || txtFacultyId.getText().isEmpty()) {
             return false;
         }
-        if (txtFaculty.getText() == null || txtFaculty.getText().isEmpty()) {
+        if (txtFacultyName.getText() == null || txtFacultyName.getText().isEmpty()) {
+            return false;
+        }
+        if (txtFacultyCutName.getText() == null || txtFacultyCutName.getText().isEmpty()) {
             return false;
         }
         return true;

@@ -6,7 +6,6 @@
 package com.example.solution.model.provider;
 
 import com.example.solution.FileSettings;
-import com.example.solution.model.Faculty;
 import com.example.solution.model.Group;
 import com.example.solution.model.Student;
 import com.example.solution.model.University;
@@ -39,12 +38,9 @@ public class XMLProvider implements DataProvider {
             Unmarshaller unmarsh = jaxb.createUnmarshaller();
             University university = (University) unmarsh.unmarshal(is);
             
-            for (Faculty faculty : university.getFaculties()) {
-                for (Group group : faculty.getGroups()) {
-                    group.setFaculty(faculty);
-                    for (Student student : group.getStudents()) {
-                        student.setGroup(group);
-                    }
+            for (Group group : university.getGroups()) {
+                for (Student student : group.getStudents()) {
+                    student.setGroup(group);
                 }
             }
             
