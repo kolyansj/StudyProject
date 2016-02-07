@@ -11,7 +11,9 @@ import com.example.solution.model.observer.Observer;
 import com.example.solution.model.provider.DataProvider;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -23,8 +25,11 @@ public class Model implements Observable {
     private University university;
     private DataProvider provider;
     private boolean changed;
+    
+    private Map<String, Object> cache;
 
     public Model() {
+        this.cache = new HashMap<>();
         university = new University();
         observers = new ArrayList<>();
     }
@@ -63,7 +68,7 @@ public class Model implements Observable {
         observersLocal = new ArrayList<>(this.observers);
         changed = false;
         for (Observer o : observersLocal) {
-            o.update(this, new ArrayList<>(university.getGroups()));
+            o.update(this, new ArrayList<>(university.getFaculties()));
         }
     }
     
@@ -75,17 +80,23 @@ public class Model implements Observable {
         this.provider = provider;
     }
     
-    public List<Group> getGroups() {
-        return university.getGroups();
+    public List<Faculty> getFaculties() {
+        return university.getFaculties();
     }
     
     public Student getStudentById(String studentId) {
         //LOG.log(Level.INFO, "id: " + id);
         if (studentId != null) {
-            for (Group group: university.getGroups()) {
-                for (Student student : group.getStudents()) {
-                    if (student.getId().equals(studentId)) {
-                        return student;
+            if (cache.containsKey(studentId)) {
+                return (Student) cache.get(studentId);
+            }
+            for (Faculty faculty : university.getFaculties()) {
+                for (Group group : faculty.getGroups()) {
+                    for (Student student : group.getStudents()) {
+                        if (student.getId().equals(studentId)) {
+                            cache.put(studentId, student);
+                            return student;
+                        }
                     }
                 }
             }
@@ -97,45 +108,103 @@ public class Model implements Observable {
     }
     
     public Group getGroupById(String groupId) {
-        for (Group g : getGroups()) {
-            if (g.getId().equals(groupId)) {
-                return g;
-            }            
+        if (groupId != null) {
+            if (cache.containsKey(groupId)) {
+                return (Group) cache.get(groupId);
+            }
+            for (Faculty faculty : university.getFaculties()) {
+                for (Group group : faculty.getGroups()) {
+                    if (group.getId().equals(groupId)) {
+                        cache.put(groupId, group);
+                        return group;
+                    }            
+                }
+            }
+        } else {
+            
         }
         return null;
     }
     
     public Group getGroupByStudentId(String studentId) {
-        for (Group g : getGroups()) {
-            for (Student s : g.getStudents()) {
-                if (s.getId().equals(studentId)) {
-                    return g;
-                }  
+        if (studentId != null) {
+            Student student = getStudentById(studentId);
+            if (student != null) {
+                Group group = student.getGroup();
+                cache.put(group.getId(), group);
+                return group;
             }
+        } else {
+            
         }
         return null;
     }
     
-    public boolean createGroup(int number, String faculty) {
-        String groupId = String.valueOf(number + faculty);
-        Group group = getGroupById(groupId);
-        if (group == null) {
-            group = new Group(groupId, number, faculty);
-            university.addGroup(group);
+    public Faculty getFacultyById(String facultyId) {
+        if (facultyId != null) {
+            if (cache.containsKey(facultyId)) {
+                return (Faculty) cache.get(facultyId);
+            }
+            for (Faculty faculty : university.getFaculties()) {
+                if (faculty.getId().equals(facultyId)) {
+                    cache.put(facultyId, faculty);
+                    return faculty;
+                }
+            }
+        } else {
+            
+        }
+        return null;
+    }
+    
+    public void createFaculty(String name, String abbreviation) {
+        String id = Util.createUnicueID();
+        Faculty faculty = new Faculty(id, name, abbreviation);
+        university.addFaculty(faculty);
+        
+        cache.put(id, faculty);
+        changed = true;
+        notifyObservers(); 
+    }
+    
+    public void updateFaculty(String facultyId, String name, String abbreviation) {
+        Faculty faculty = getFacultyById(facultyId);
+        if (faculty != null) {
+            faculty.setName(name);
+            faculty.setAbbreviation(abbreviation);
             
             changed = true;
             notifyObservers();
-            
-            return true;
-        } else {
-            return false;
-        }        
+        }
     }
     
-    public void updateGroup(String groupId, int number, String faculty) {
+    public void deleteFaculty(String facultyId) {
+        Faculty faculty = getFacultyById(facultyId);
+        if (faculty != null) {                        
+            university.removeFaculty(faculty);
+            
+            cache.remove(facultyId);
+            changed = true;
+            notifyObservers();
+        }
+    }
+    
+    public void createGroup(int number, Faculty faculty) {
+        String id = Util.createUnicueID();
+        Group group = new Group(id, number, faculty);
+        faculty.getGroups().add(group);
+        
+        cache.put(id, group);
+        changed = true;
+        notifyObservers();      
+    }
+    
+    public void updateGroup(String groupId, int number, Faculty faculty) {
         Group group = getGroupById(groupId);
-        if (group != null) {            
-            group.setId(String.valueOf(number + faculty));
+        if (group != null) {      
+            group.getFaculty().getGroups().remove(group);
+            faculty.getGroups().add(group);
+            
             group.setNumber(number);
             group.setFaculty(faculty);
             
@@ -147,9 +216,10 @@ public class Model implements Observable {
     public void deleteGroup(String groupId) {
         Group group = getGroupById(groupId);
         if (group != null) {
+            group.getFaculty().getGroups().remove(group);
             group.getStudents().clear();
-            university.removeGroup(group);
             
+            cache.remove(groupId);            
             changed = true;
             notifyObservers();
         }
@@ -158,7 +228,8 @@ public class Model implements Observable {
     public void createStudent(String name, String middleName, String lastName,
             Group group, Date date) {
         
-        Student newStudent = new Student(Util.createUnicueID());
+        String id = Util.createUnicueID();
+        Student newStudent = new Student(id);
         newStudent.setName(name);
         newStudent.setMiddleName(middleName);
         newStudent.setLastName(lastName);                    
@@ -166,6 +237,7 @@ public class Model implements Observable {
         newStudent.setGroup(group);
         group.getStudents().add(newStudent);
         
+        cache.put(id, newStudent);
         changed = true;
         notifyObservers();
     }
@@ -192,67 +264,12 @@ public class Model implements Observable {
         if (student != null) {
             student.getGroup().getStudents().remove(student);
             
+            cache.remove(studentId); 
             changed = true;
             notifyObservers();
         }
     }
 
-    
-    public Faculty getFacultyById(String facultyId) {
-        //LOG.log(Level.INFO, "id: " + id);
-        if (facultyId != null) {
-            for (Faculty faculty: university.getFaculties()) {
-                    if (faculty.getId().equals(facultyId)) {
-                        return faculty;
-                    }
-            }
-        } else {
-            //LOG.log(Level.WARN, "id is null");
-            //throw new NullPointerException("id is null");
-        }
-        return null;
-    }
-    
-    public boolean createFaculty(String id, String name, String cutName) {
-        String facultyId = id;
-        Faculty faculty = getFacultyById(facultyId);
-        if (faculty == null) {
-            faculty = new Faculty(id, name, cutName);
-            university.addFaculty(faculty);
-            
-            changed = true;
-            notifyObservers();
-            
-            return true;
-        } else {
-            return false;
-        }        
-    }
-    
-    public void updateFaculty(String id, String name, String cutName) {
-        Faculty faculty = getFacultyById(id);
-        if (faculty != null) {            
-            faculty.setId(id);
-            faculty.setName(name);
-            faculty.setCutName(cutName);
-            
-            changed = true;
-            notifyObservers();
-        }
-    }
-    
-    public void deleteFaculty(String facultyId) {
-        Faculty faculty = getFacultyById(facultyId);
-        if (faculty != null) {
-            faculty.getGroups().clear();
-            university.removeFaculty(faculty);
-            
-            changed = true;
-            notifyObservers();
-        }
-    }
-    
-    
     public void loadTasks() {
         //LOG.log(Level.INFO, "load from XML or DB");
         if(provider != null) {

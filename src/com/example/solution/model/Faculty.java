@@ -23,7 +23,7 @@ public class Faculty implements Serializable {
     
     private String id;
     private String name;
-    private String cutName;
+    private String abbreviation;
     private List<Group> groups;
     
     public Faculty() {
@@ -34,7 +34,7 @@ public class Faculty implements Serializable {
         this();
         this.id = id;
         this.name = name;
-        this.cutName = abbreviation;
+        this.abbreviation = abbreviation;
     }       
 
     @XmlAttribute(name = "id")
@@ -56,12 +56,12 @@ public class Faculty implements Serializable {
     }
     
     @XmlAttribute(name = "abbreviation")
-    public String getCutName() {
-        return cutName;
+    public String getAbbreviation() {
+        return abbreviation;
     }
 
-    public void setCutName(String cutName) {
-        this.cutName = cutName;
+    public void setAbbreviation(String abbreviation) {
+        this.abbreviation = abbreviation;
     }
 
     @XmlElementWrapper(name="groups")

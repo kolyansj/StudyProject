@@ -89,11 +89,6 @@ public class Student implements Serializable {
     public void setGroup(Group group) {
         this.group = group;
     }
-    
-    public void setGroup(int groupNumber, String faculty){
-        this.group.setFaculty(faculty);
-        this.group.setNumber(groupNumber);
-    }
 
     @XmlAttribute(name = "date")
     public Date getStartStudyDate() {

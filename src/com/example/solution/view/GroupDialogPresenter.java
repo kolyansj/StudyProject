@@ -10,7 +10,6 @@ import com.example.solution.ViewController;
 import com.example.solution.model.Group;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -28,8 +27,6 @@ public class GroupDialogPresenter {
     private TextField txtFaculty;
     @FXML
     private TextField txtGroupNumber;
-    @FXML
-    private Label lbCountStudents;
     
     private ViewMode mode;
     private Stage dialogStage;
@@ -50,15 +47,15 @@ public class GroupDialogPresenter {
         if (isInputValid()) {            
             switch(mode) {
                 case Create: {                                        
-                    ctrl.createGroup(
-                            Integer.parseInt(txtGroupNumber.getText()),
-                            txtFaculty.getText());
+                    //ctrl.createGroup(
+                    //        Integer.parseInt(txtGroupNumber.getText()),
+                    //        txtFaculty.getText());
                 }
                 break;
                 case Edit: {                                       
-                    ctrl.updateGroup(group.getId(), 
-                            Integer.parseInt(txtGroupNumber.getText()), 
-                            txtFaculty.getText());
+                    //ctrl.updateGroup(group.getId(), 
+                    //        Integer.parseInt(txtGroupNumber.getText()), 
+                    //        txtFaculty.getText());
                 }
                 break;
                 default: throw new UnsupportedOperationException();
@@ -88,8 +85,7 @@ public class GroupDialogPresenter {
     public void setGroup(Group group) {
         this.group = group;
         txtGroupNumber.setText(String.valueOf(group.getNumber()));
-        txtFaculty.setText(group.getFaculty());
-        lbCountStudents.setText(String.valueOf(group.getStudents().size()));
+        txtFaculty.setText(group.getFaculty().toString());
     }
 
     public boolean isOkClicked() {
