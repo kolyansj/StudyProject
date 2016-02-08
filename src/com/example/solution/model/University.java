@@ -5,6 +5,8 @@
  */
 package com.example.solution.model;
 
+import com.example.solution.visitor.Visitable;
+import com.example.solution.visitor.Visitor;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Nikolay
  */
 @XmlRootElement(name = "university")
-public class University implements Serializable {
+public class University implements Visitable, Serializable {
 
     @XmlElementRef
     private List<Faculty> faculties;
@@ -48,4 +50,10 @@ public class University implements Serializable {
     public boolean removeFaculty(Faculty faculty){
         return faculties.remove(faculty);
     }    
+
+    @Override
+    public void merge(Visitor visitor) {
+        visitor.visit(this);
+    }
+    
 }

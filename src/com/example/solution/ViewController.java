@@ -11,14 +11,20 @@ import com.example.solution.model.Faculty;
 import com.example.solution.model.Group;
 import com.example.solution.model.Model;
 import com.example.solution.model.Student;
+import com.example.solution.model.University;
 import com.example.solution.view.FacultyDialogPresenter;
 import com.example.solution.view.GroupDialogPresenter;
 import com.example.solution.view.OverviewPresenter;
 import com.example.solution.view.StudentDialogPresenter;
+import com.example.solution.visitor.MergeVisitor;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
@@ -34,24 +40,26 @@ public class ViewController {
 
     private Stage primaryStage;
     private final Model data;
+    private final MergeVisitor visitor;
 
     public ViewController(Model data) {
         this.data = data;
+        visitor = new MergeVisitor(data);
     }    
     
     public void init() {
         FileSettings settings = FileSettings.getInstance();
         settings.loadSettings("resources/config.properties");
         data.setDataProvider(settings.getProvider());
-        data.loadTasks();
+        data.loadData();
     }
     
     public void close() {
-        data.saveTasks();
+        data.saveData();
     }
     
     public List<Faculty> getData() {
-        return data.getFaculties();
+        return data.getData().getFaculties();
     }
     
     public Group getGroupById(String groupId) {
@@ -100,6 +108,11 @@ public class ViewController {
         this.primaryStage = stage;
     }
     
+    public void mergeFile(File file) {
+        University univ = data.loadData(file);
+        univ.merge(visitor);        
+    }
+    
     public void showRootLayout() {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -110,6 +123,7 @@ public class ViewController {
             OverviewPresenter controller = loader.getController();
             controller.setController(this);
             data.addObserver(controller);
+            visitor.setListener(controller);
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {

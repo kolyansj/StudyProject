@@ -12,9 +12,11 @@ import com.example.solution.model.Group;
 import com.example.solution.model.Student;
 import com.example.solution.model.observer.Observable;
 import com.example.solution.model.observer.Observer;
+import com.example.solution.visitor.MergeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -34,7 +36,7 @@ import javafx.util.Callback;
  *
  * @author Answer
  */
-public class OverviewPresenter implements Observer {
+public class OverviewPresenter implements Observer, MergeListener {
 
     @FXML
     private TableView<Student> studentsTable;
@@ -258,9 +260,11 @@ public class OverviewPresenter implements Observer {
         fc.getExtensionFilters().add(extFilter);
         try {
             List<File> arrFiles = fc.showOpenMultipleDialog(null);
-            for (int i = 0; i < arrFiles.size(); i++) {
-                // compare two or more xml
-            }
+            /*for (int i = 0; i < arrFiles.size(); i++) {
+            // compare two or more xml
+            }*/
+            File file = arrFiles.get(0);
+            ctrl.mergeFile(file);
         } catch (NullPointerException ex) {
             System.out.println("Файлы не выбраны или не найдены");
         }
@@ -302,6 +306,42 @@ public class OverviewPresenter implements Observer {
                 showFacultyDetails(selectedFaculty);
             }
         }
+    }
+
+    @Override
+    public void addFaculty(Faculty faculty) {
+        String text = compareResultArea.getText();
+        compareResultArea.setText("Добавлен факльтет: " + faculty.toString() + "\n" + text);
+    }
+
+    @Override
+    public void addGroup(Group group) {
+        String text = compareResultArea.getText();
+        compareResultArea.setText("Добавлена группа: " + group.toString() + "\n" + text);
+    }
+
+    @Override
+    public void addStudent(Student student) {
+        String text = compareResultArea.getText();
+        compareResultArea.setText("Добавлен студент: " + student.toString() + "\n" + text);
+    }
+
+    @Override
+    public void equalsFaculty(Faculty faculty) {
+        String text = compareResultArea.getText();
+        compareResultArea.setText("Совпадение факльтетов: " + faculty.toString() + "\n" + text);
+    }
+
+    @Override
+    public void equalsGroup(Group group) {
+        String text = compareResultArea.getText();
+        compareResultArea.setText("Совпадение групп: " + group.toString() + "\n" + text);
+    }
+
+    @Override
+    public void equalsStudent(Student student) {
+        String text = compareResultArea.getText();
+        compareResultArea.setText("Совпадение студентов: " + student.toString() + "\n" + text);
     }
 
 }

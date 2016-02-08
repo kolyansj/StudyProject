@@ -31,10 +31,8 @@ public class XMLProvider implements DataProvider {
     //private static final Logger LOG = Logger.getLogger(XMLProvider.class.getName()); 
     
     @Override
-    public University loadData() {
-        FileSettings settings = FileSettings.getInstance();
-        File universityFile = settings.getUniversityFile();
-        try (InputStream is = new FileInputStream(universityFile)) {
+    public University loadData(File file) {
+        try (InputStream is = new FileInputStream(file)) {
             JAXBContext jaxb = JAXBContext.newInstance(Group.class, Student.class, University.class);
             Unmarshaller unmarsh = jaxb.createUnmarshaller();
             University university = (University) unmarsh.unmarshal(is);
@@ -58,11 +56,18 @@ public class XMLProvider implements DataProvider {
             return new University();
         }
     }
+    
+    @Override
+    public University loadData() {
+        FileSettings settings = FileSettings.getInstance();
+        File file = settings.getDataFile();
+        return loadData(file);
+    }
 
     @Override
     public void saveData(University sch) {
         FileSettings settings = FileSettings.getInstance();
-        File universityFile = settings.getUniversityFile();
+        File universityFile = settings.getDataFile();
         try (OutputStream os = new FileOutputStream(universityFile)) {
             JAXBContext jaxb = JAXBContext.newInstance(Group.class, Student.class, University.class);
             Marshaller marsh = jaxb.createMarshaller();

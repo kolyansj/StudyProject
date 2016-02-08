@@ -5,6 +5,8 @@
  */
 package com.example.solution.model;
 
+import com.example.solution.visitor.Visitable;
+import com.example.solution.visitor.Visitor;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +22,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Answer
  */
 @XmlRootElement(name = "group")
-public class Group implements Serializable {
+public class Group implements Visitable, Serializable {
     
     private String id;
     private int number;
@@ -100,6 +102,11 @@ public class Group implements Serializable {
     @Override
     public String toString() {
         return "Группа №" + number;
+    }
+
+    @Override
+    public void merge(Visitor visitor) {
+        visitor.visit(this);
     }
         
 }

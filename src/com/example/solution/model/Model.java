@@ -9,6 +9,7 @@ import com.example.solution.Util;
 import com.example.solution.model.observer.Observable;
 import com.example.solution.model.observer.Observer;
 import com.example.solution.model.provider.DataProvider;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -80,8 +81,8 @@ public class Model implements Observable {
         this.provider = provider;
     }
     
-    public List<Faculty> getFaculties() {
-        return university.getFaculties();
+    public University getData() {
+        return university;
     }
     
     public Student getStudentById(String studentId) {
@@ -157,6 +158,14 @@ public class Model implements Observable {
         return null;
     }
     
+    public void createFaculty(Faculty faculty) {
+        university.addFaculty(faculty);
+        
+        cache.put(faculty.getId(), faculty);
+        changed = true;
+        notifyObservers();
+    }
+    
     public void createFaculty(String name, String abbreviation) {
         String id = Util.createUnicueID();
         Faculty faculty = new Faculty(id, name, abbreviation);
@@ -188,6 +197,14 @@ public class Model implements Observable {
             notifyObservers();
         }
     }
+    
+     public void createGroup(Group group, Faculty faculty) {
+        faculty.getGroups().add(group);
+        
+        cache.put(group.getId(), group);
+        changed = true;
+        notifyObservers();
+     }
     
     public void createGroup(int number, Faculty faculty) {
         String id = Util.createUnicueID();
@@ -268,10 +285,18 @@ public class Model implements Observable {
             changed = true;
             notifyObservers();
         }
+    }    
+    
+    public University loadData(File file) {
+        if(provider != null) {
+            return provider.loadData(file);
+        } else {
+            //LOG.log(Level.WARN, "Provider is null");
+        }
+        return null;
     }
     
-    
-    public void loadTasks() {
+    public void loadData() {
         //LOG.log(Level.INFO, "load from XML or DB");
         if(provider != null) {
             university = provider.loadData();
@@ -282,7 +307,7 @@ public class Model implements Observable {
         }
     }
 
-    public void saveTasks() {
+    public void saveData() {
         //LOG.log(Level.INFO, "save to XML or DB");
         if(provider != null) {
             provider.saveData(university);

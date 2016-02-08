@@ -5,6 +5,8 @@
  */
 package com.example.solution.model;
 
+import com.example.solution.visitor.Visitable;
+import com.example.solution.visitor.Visitor;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Nikolay
  */
 @XmlRootElement(name = "faculty")
-public class Faculty implements Serializable {
+public class Faculty implements Visitable, Serializable {
     
     private String id;
     private String name;
@@ -99,6 +101,11 @@ public class Faculty implements Serializable {
     @Override
     public String toString() {
         return cutName;
+    }
+
+    @Override
+    public void merge(Visitor visitor) {
+        visitor.visit(this);
     }
 
 }

@@ -53,8 +53,8 @@ public class FileSettings {
         throw new UnsupportedOperationException();
     }
     
-    public File getUniversityFile() {
-        String prop = properties.getProperty("universityxml", "resources/university.xml");
+    public File getDataFile() {
+        String prop = properties.getProperty("xml", "resources/data.xml");
         if(prop != null) {
             File alarm = new File(prop);
             return alarm;

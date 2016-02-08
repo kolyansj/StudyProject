@@ -6,6 +6,8 @@
 package com.example.solution.model;
 
 import com.example.solution.Util;
+import com.example.solution.visitor.Visitable;
+import com.example.solution.visitor.Visitor;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -19,7 +21,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Answer
  */
 @XmlRootElement(name = "student")
-public class Student implements Serializable {
+public class Student implements Visitable, Serializable {
     
     private String id;
     private String name;
@@ -120,7 +122,17 @@ public class Student implements Serializable {
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return name + " " + middleName + " " + lastName;
+    }
     
     
+
+    @Override
+    public void merge(Visitor visitor) {
+        visitor.visit(this);
+    }
 
 }
