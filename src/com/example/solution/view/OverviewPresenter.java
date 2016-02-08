@@ -161,8 +161,6 @@ public class OverviewPresenter implements Observer, MergeListener {
         updateTables();
     }
 
-    int count = 0;
-
     private void updateTables() {
         facultiesTable.getColumns().get(0).setVisible(false);
         facultiesTable.getColumns().get(0).setVisible(true);
