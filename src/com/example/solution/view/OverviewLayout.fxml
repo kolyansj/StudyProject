@@ -132,16 +132,16 @@
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="367.0" prefWidth="297.0">
               <children>
                 <Label font="$x1" layoutX="48.0" layoutY="14.0" text="Информация о факультете" />
-                <GridPane layoutX="14.0" layoutY="55.0" prefWidth="264.0">
+                <GridPane layoutX="14.0" layoutY="55.0" prefWidth="450.0">
                   <children>
                     <Label text="Название факультета" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                     <Label text="Сокращ ение" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                    <Label fx:id="lbFacultyName" prefWidth="132.00009999999747" text="" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                    <Label fx:id="lbFacultyCutName" prefWidth="132.0" text="" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                    <Label fx:id="lbFacultyName" minWidth="290.0" prefWidth="290.0" text="" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    <Label fx:id="lbFacultyCutName" prefWidth="150.0" text="" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   </children>
                   <columnConstraints>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="224.0" minWidth="10.0" prefWidth="130.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="323.0" minWidth="10.0" prefWidth="320.0" />
                   </columnConstraints>
                   <rowConstraints>
                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />

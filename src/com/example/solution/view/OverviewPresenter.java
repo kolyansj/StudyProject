@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.example.solution.view;
 
 import com.example.solution.ViewController;
@@ -46,8 +41,6 @@ public class OverviewPresenter implements Observer, MergeListener {
     private TableColumn<Student, String> colMiddleName;
     @FXML
     private TableColumn<Student, String> colLastName;
-    //@FXML
-    //private TableColumn<Student, String> colGroup;
     @FXML
     private TableColumn<Student, String> colStartDate;
 
@@ -107,7 +100,15 @@ public class OverviewPresenter implements Observer, MergeListener {
         });
 
         colGroupNumber.setCellValueFactory(new PropertyValueFactory<Group, Integer>("number"));
-        colFaculty.setCellValueFactory(new PropertyValueFactory<Group, String>("faculty"));
+        //colFaculty.setCellValueFactory(new PropertyValueFactory<Group, String>("faculty"));
+        colFaculty.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Group, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Group, String> p) {
+                SimpleStringProperty property = new SimpleStringProperty();
+                property.setValue(p.getValue().getFaculty().getCutName());
+                return property;
+            }
+        });
 
         studentsTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Student>() {
             @Override
@@ -122,16 +123,15 @@ public class OverviewPresenter implements Observer, MergeListener {
             public void changed(ObservableValue<? extends Group> observable,
                     Group oldValue, Group newValue) {
                 showGroupDetails(newValue);
-                
             }
         });
-        
+
         colFacultyName.setCellValueFactory(new PropertyValueFactory<Faculty, String>("name"));
         colFacultyCutName.setCellValueFactory(new PropertyValueFactory<Faculty, String>("cutName"));
-        
+
         facultiesTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Faculty>() {
             @Override
-            public void changed(ObservableValue<? extends Faculty> observable, 
+            public void changed(ObservableValue<? extends Faculty> observable,
                     Faculty oldValue, Faculty newValue) {
                 showFacultyDetails(newValue);
             }
@@ -143,7 +143,7 @@ public class OverviewPresenter implements Observer, MergeListener {
         ObservableList<Group> groupList = FXCollections.observableArrayList();
         ObservableList<Student> studentList = FXCollections.observableArrayList();
         ObservableList<Faculty> facultyList = FXCollections.observableArrayList();
-        List<Faculty> faculties = (List<Faculty>) args;  
+        List<Faculty> faculties = (List<Faculty>) args;
         facultyList.addAll(faculties);
         facultiesTable.getItems().clear();
         facultiesTable.setItems(facultyList);
@@ -153,22 +153,21 @@ public class OverviewPresenter implements Observer, MergeListener {
             for (Group group : groups) {
                 studentList.addAll(group.getStudents());
             }
-        }  
+        }
         groupsTable.getItems().clear();
         groupsTable.setItems(groupList);
         studentsTable.getItems().clear();
         studentsTable.setItems(studentList);
-        System.out.println("UPDATE");
         updateTables();
     }
-    
-    private void updateTables(){
+
+    int count = 0;
+
+    private void updateTables() {
         facultiesTable.getColumns().get(0).setVisible(false);
         facultiesTable.getColumns().get(0).setVisible(true);
         groupsTable.getColumns().get(0).setVisible(false);
         groupsTable.getColumns().get(0).setVisible(true);
-        studentsTable.getColumns().get(0).setVisible(false);
-        studentsTable.getColumns().get(0).setVisible(true);
     }
 
     public void setController(ViewController ctrl) {
@@ -185,8 +184,8 @@ public class OverviewPresenter implements Observer, MergeListener {
             lbStartDate.setText(Util.formatDate(student.getStartStudyDate()));
         }
     }
-    
-    private void showFacultyDetails(Faculty faculty){
+
+    private void showFacultyDetails(Faculty faculty) {
         if (faculty != null) {
             lbFacultyName.setText(faculty.getName());
             lbFacultyCutName.setText(faculty.getCutName());
@@ -261,8 +260,8 @@ public class OverviewPresenter implements Observer, MergeListener {
         try {
             List<File> arrFiles = fc.showOpenMultipleDialog(null);
             /*for (int i = 0; i < arrFiles.size(); i++) {
-            // compare two or more xml
-            }*/
+             // compare two or more xml
+             }*/
             File file = arrFiles.get(0);
             ctrl.mergeFile(file);
         } catch (NullPointerException ex) {
@@ -311,7 +310,7 @@ public class OverviewPresenter implements Observer, MergeListener {
     @Override
     public void addFaculty(Faculty faculty) {
         String text = compareResultArea.getText();
-        compareResultArea.setText("Добавлен факльтет: " + faculty.toString() + "\n" + text);
+        compareResultArea.setText("Добавлен факультет: " + faculty.toString() + "\n" + text);
     }
 
     @Override
